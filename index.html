@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>微剧组</title>
+    <link rel="icon" href="./TP/favicon.ico" />
+    <link rel="stylesheet" href="./YS.css">
+    <link rel="stylesheet" href="./font/iconfont.css">
+  </head>
+  <body class="flex column">
+    <div class="square">
+        <ul class="bj">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <div class="circle">
+        <ul class="bj">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <!--标题栏-->
+    <div style=" z-index: 3">
+      <div style="height: 95px;" class="bt flex2 baise yinying">
+        <!-- 头像栏 -->
+        <div
+          style="padding: 10px; align-items: center; justify-content: center"
+          class="flex"
+        >
+          <img
+            src="./TP/LOGO.png"
+            width="70px"
+            height="75px"
+            alt="微剧组"
+            title="星标"
+          />
+        </div>
+        <b>微</b>
+        <b>剧</b>
+        <b>组</b>
+      </div>
+    </div>
+      <!-- 导航栏 -->
+      <div style="z-index: 2;" class="dw">
+          <div class="munu-box">
+            <div class="emotion-box">
+              <i id="emotion1" class="iconfont icon-zhankaicaidan"></i>
+              <i id="emotion2" class="iconfont icon-shouqicaidan"></i>
+            </div>
+            <ul>
+              <li>
+                <a href="#">
+                  <i class="iconfont icon-home"></i>
+                  <p class="content">首页</p>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="iconfont icon-icon"></i>
+                  <p class="content">图库</p>
+                </a>
+              </li>
+              <li>
+                <a href="./shouji.html">
+                  <i class="iconfont icon-shouji"></i>
+                  <p class="content">手机版</p>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="iconfont icon-xinxi"></i>
+                  <p class="content">信息</p>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="iconfont icon-guanyu"></i>
+                  <p class="content">关于</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+      </div>
+
+
+      <!--内容区-->
+      <div style="margin-left: 50px; overflow: auto" class="flex column mgr8">
+          <!--轮播区-->
+          <div class="lun">
+            <div class="lunnei flex">
+              <!-- 图片块 -->
+              <div style="--i:0" class="aa baise mgr8 mgt8 yinying">
+                
+              </div>
+              <div style="--i:1"  class="ab baise mgr8 mgt8 yinying">
+                
+              </div>
+              <div style="--i:2"  class="ac baise mgr8 mgt8 yinying">
+                
+              </div>
+              <div style="--i:3"  class="ad baise mgr8 mgt8 yinying">
+                
+              </div>
+              <div style="--i:4"  class="ae baise mgt8 yinying">
+                
+              </div>
+            </div>
+          </div>
+          <!--列表区-->
+          <div style="margin-top: 200px;" class="flex column">
+            <!-- 列表项 -->
+            <div style="height: 144px" class="flex baise mgt8 yinying">
+                <div style="margin-left: auto;">
+                  <!-- 音乐播放 -->
+                  <div style="height: 114px" class="flex baise yinying">
+                    <!-- 图片 -->
+                    <img
+                      src="./TP/Martin Ermen - River Flows In You.jpg"
+                      width="30%"
+                      height="105px"
+                      style="border-radius: 50%;margin: 5px;"
+                      alt=""
+                    />
+                    <!-- 歌曲名 -->
+                    <p style="margin: 20px; color: rgb(243, 243, 243); font-size: 16px">
+                      Martin Ermen - River Flows In You
+                    </p>
+                  </div>
+                  <!-- 播放器 -->
+                  <div>
+                    <audio controls class="baise yinying" style="height: 30px; width: 100%">
+                      <source src="Martin Ermen - River Flows In You.mp3" />
+                    </audio>
+                  </div>
+                </div>
+            </div>
+            <div style="height: 144px" class="baise mgt8 yinying"></div>
+            <div style="height: 144px" class="baise mgt8 yinying"></div>
+          </div>
+      </div>
+  </body>
+</html>
