@@ -2,7 +2,7 @@
         margin: 0;
         height: 100vh;
         /* background-image: url("./TP/SKY0.jpg"); */
-        background: linear-gradient(200deg,#dd82f7,#6d90d1);
+        background: linear-gradient(200deg,#6d90d1,#dd82f7);
         background-size: 100% 100%;
         /* background-attachment: fixed; */
       }
