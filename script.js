@@ -8,7 +8,7 @@ const progress = document.getElementById("progress")
 const progressContainer = document.getElementById("progress-container")
 const title = document.getElementById("title")
 const musicCover = document.getElementById("music-cover")
-
+window.onload = function(){document.getElementById("yingcang").style.display = "none"}
 // 音乐信息
 const songs = ["打上花火", "让风告诉你 - 花玲&喵☆酱&宴宁&kinsen", "三浦透子 - グランドエスケープ (Movie edit)", "Martin Ermen - River Flows In You"]
 // 默认从第一首开始
