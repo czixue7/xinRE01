@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>微剧组 - 修复版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css" />
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            height: 100vh;
+            background: #0a0a1a;
+            font-family: 'Lato', sans-serif;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        /* 加载动画 */
+        .loadingSeven {
+            width: 80px;
+            height: 40px;
+            margin: 0 auto;
+        }
+        
+        .loadingSeven span {
+            display: inline-block;
+            width: 8px;
+            height: 100%;
+            border-radius: 4px;
+            background: #6d90d1;
+            animation: loadsaven 1.04s ease infinite;
+        }
+        
+        @keyframes loadsaven {
+            0%,100% {
+                height: 40px;
+                background: #6d90d1;
+            }
+            50% {
+                height: 60px;
+                margin-top: -20px;
+                background: #dd82f7;
+            }
+        }
+        
+        .loadingSeven span:nth-child(2) {
+            animation-delay: 0.13s;
+        }
+        
+        .loadingSeven span:nth-child(3) {
+            animation-delay: 0.26s;
+        }
+        
+        .loadingSeven span:nth-child(4) {
+            animation-delay: 0.39s;
+        }
+        
+        .loadingSeven span:nth-child(5) {
+            animation-delay: 0.52s;
+        }
+        
+        #yingcang {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            position: absolute;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a1a;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+        
+        /* 动态银河背景 */
+        #galaxy-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* 标题栏样式 */
+        .header {
+            height: 95px;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            font-size: 50px;
+            color: #fff;
+            background-color: rgba(10, 10, 26, 0.7);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header img {
+            width: 70px;
+            height: 75px;
+            filter: drop-shadow(0 0 5px rgba(109, 144, 209, 0.7));
+        }
+        
+        .header b {
+            font-family: serif;
+            text-shadow: 0 0 10px rgba(221, 130, 247, 0.7);
+            background: linear-gradient(45deg, #6d90d1, #dd82f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* 主容器 */
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        /* 简约扁平导航栏 */
+        .sidebar {
+            width: 70px;
+            background-color: rgba(10, 10, 26, 0.7);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .sidebar:hover {
+            width: 180px;
+        }
+        
+        .sidebar:hover .menu-text {
+            display: block;
+            opacity: 1;
+        }
+        
+        .logo-container {
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #6d90d1, #dd82f7);
+            border-radius: 8px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .menu {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            list-style: none;
+            margin: 12px 0;
+            position: relative;
+        }
+        
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            user-select: none;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .menu-item a:hover {
+            background: rgba(109, 144, 209, 0.2);
+            color: #fff;
+        }
+        
+        .menu-item.active a {
+            background: rgba(109, 144, 209, 0.3);
+            color: #fff;
+        }
+        
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(to bottom, #6d90d1, #dd82f7);
+        }
+        
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item a:hover .menu-icon {
+            transform: scale(1.1);
+        }
+        
+        .menu-text {
+            display: none;
+            opacity: 0;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        /* 内容区域 */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 图片画廊 */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .gallery-item {
+            background-color: rgba(10, 10, 26, 0.5);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            border-radius: 12px;
+            height: 120px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(109, 144, 209, 0.4);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            background: linear-gradient(to top, rgba(10, 10, 26, 0.8), transparent);
+            pointer-events: none;
+        }
+        
+        /* 优化后的音乐播放器 - 右侧隐藏样式 */
+        .music-player-container {
+            position: fixed;
+            right: -320px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 350px;
+            background: linear-gradient(135deg, rgba(20, 20, 40, 0.95), rgba(40, 20, 60, 0.95));
+            border-radius: 15px 0 0 15px;
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(109, 144, 209, 0.3);
+            border-right: none;
+            transition: right 0.5s ease;
+            z-index: 90;
+            backdrop-filter: blur(10px);
+        }
+        
+        .music-player-container.open {
+            right: 0;
+        }
+        
+        .music-toggle {
+            position: absolute;
+            left: -40px;
+            top: 20px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #6d90d1, #dd82f7);
+            border-radius: 8px 0 0 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: -3px 0 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .music-toggle:hover {
+            background: linear-gradient(45deg, #5a7fc9, #c96ee6);
+            transform: scale(1.05);
+        }
+        
+        .music-player {
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .music-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .music-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .music-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 5px;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+        
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+        
+        .music-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .img-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .img-container::after {
+            content: "";
+            background: linear-gradient(45deg, #6d90d1, #dd82f7);
+            border-radius: 50%;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            width: 15px;
+            height: 15px;
+            transform: translate(-50%, 50%);
+        }
+        
+        .img-container img {
+            border-radius: 50%;
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(109, 144, 209, 0.5);
+            animation: rotate 15s linear infinite;
+            animation-play-state: paused;
+        }
+        
+        .music-container.play .img-container img {
+            animation-play-state: running;
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .music-info {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .music-info h4 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            color: #fff;
+        }
+        
+        .music-info p {
+            margin: 0;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .progress-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+            height: 6px;
+            width: 100%;
+        }
+        
+        .progress {
+            background: linear-gradient(to right, #6d90d1, #dd82f7);
+            border-radius: 5px;
+            height: 100%;
+            width: 0%;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px rgba(109, 144, 209, 0.7);
+        }
+        
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+        }
+        
+        .navigation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .action-btn {
+            border: 0;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 10px;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            color: #fff;
+            transform: scale(1.1);
+        }
+        
+        .action-btn.action-btn-big {
+            color: #fff;
+            font-size: 30px;
+            background: rgba(109, 144, 209, 0.3);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .action-btn.action-btn-big:hover {
+            background: rgba(109, 144, 209, 0.5);
+            box-shadow: 0 0 15px rgba(109, 144, 209, 0.5);
+        }
+        
+        .playlist {
+            margin-top: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+        }
+        
+        .playlist-item {
+            padding: 8px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .playlist-item:hover {
+            background: rgba(109, 144, 209, 0.2);
+        }
+        
+        .playlist-item.active {
+            background: rgba(109, 144, 209, 0.3);
+            color: #fff;
+        }
+        
+        .playlist-item i {
+            margin-right: 8px;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        
+        /* 内容区块 */
+        .content-block {
+            background-color: rgba(10, 10, 26, 0.5);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            height: 150px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 18px;
+            border: 1px solid rgba(109, 144, 209, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .content-block:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(109, 144, 209, 0.3);
+            color: #fff;
+        }
+        
+        /* 页脚 */
+        .footer {
+            background-color: rgba(10, 10, 26, 0.5);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            margin-top: 10px;
+            border: 1px solid rgba(109, 144, 209, 0.2);
+        }
+        
+        /* 响应式设计 */
+        @media screen and (max-width: 768px) {
+            .header {
+                height: 70px;
+                font-size: 35px;
+            }
+            
+            .header img {
+                width: 50px;
+                height: 55px;
+            }
+            
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+            }
+            
+            .sidebar:hover {
+                width: 100%;
+            }
+            
+            .logo-container {
+                display: none;
+            }
+            
+            .menu {
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 10px 0;
+            }
+            
+            .menu-item {
+                margin: 0;
+            }
+            
+            .menu-text {
+                display: block;
+                font-size: 12px;
+                opacity: 1;
+                margin-right: 0;
+            }
+            
+            .menu-icon {
+                margin-right: 0;
+                margin-bottom: 5px;
+            }
+            
+            .menu-item a {
+                flex-direction: column;
+                padding: 8px 12px;
+            }
+            
+            .menu-item.active::before {
+                width: 100%;
+                height: 3px;
+                top: auto;
+                bottom: 0;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            
+            .gallery-item {
+                height: 100px;
+            }
+            
+            .music-player-container {
+                width: 300px;
+                right: -300px;
+            }
+            
+            .content-block {
+                height: 120px;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            }
+            
+            .gallery-item {
+                height: 80px;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+            
+            .music-player-container {
+                width: 280px;
+                right: -280px;
+            }
+        }
+        
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 10, 26, 0.3);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #6d90d1, #dd82f7);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #5a7fc9, #c96ee6);
+        }
+    </style>
+</head>
+<body>
+    <!-- 加载动画 -->
+    <div id="yingcang">
+        <div class="loadingSeven">
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+    </div>
+    
+    <!-- 动态银河背景 -->
+    <canvas id="galaxy-bg"></canvas>
+    
+    <!-- 标题栏 -->
+    <div class="header">
+        <div>
+            <img src="./TP/LOGO.png" alt="微剧组" title="星标" />
+        </div>
+        <b>微</b>
+        <b>剧</b>
+        <b>组</b>
+    </div>
+    
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 简约扁平导航栏 -->
+        <div class="sidebar">
+            <div class="logo-container">
+                <div class="logo">W</div>
+            </div>
+            <ul class="menu">
+                <li class="menu-item active">
+                    <a href="#">
+                        <div class="menu-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                        </div>
+                        <p class="menu-text">首页</p>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <div class="menu-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="3" y1="9" x2="21" y2="9"></line>
+                                <line x1="9" y1="21" x2="9" y2="9"></line>
+                            </svg>
+                        </div>
+                        <p class="menu-text">图库</p>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <div class="menu-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12" y2="8"></line>
+                            </svg>
+                        </div>
+                        <p class="menu-text">信息</p>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <div class="menu-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
+                        <p class="menu-text">关于</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 图片画廊 -->
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="./TP/SKY0.jpg" alt="光遇-献祭升华" title="光遇-献祭升华" />
+                </div>
+                <div class="gallery-item">
+                    <img src="./TP/SKY1.jpg" alt="光遇-遇镜传送门" title="光遇-遇镜传送门" />
+                </div>
+                <div class="gallery-item">
+                    <img src="./TP/SKY2.jpg" alt="光遇-霞谷圆梦村" title="光遇-霞谷圆梦村" />
+                </div>
+                <div class="gallery-item">
+                    <img src="./TP/SKY3.jpg" alt="光遇-玫瑰花园" title="光遇-玫瑰花园" />
+                </div>
+                <div class="gallery-item">
+                    <img src="./TP/SKY4.jpg" alt="光遇-遇镜夕阳" title="光遇-遇镜夕阳" />
+                </div>
+            </div>
+            
+            <!-- 内容区块 -->
+            <div class="content-block">
+                
+            </div>
+            <div class="content-block">
+                
+            </div>
+            
+            <!-- 页脚 -->
+            <div class="footer">
+                <p></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 优化后的音乐播放器 -->
+    <div class="music-player-container" id="music-player-container">
+        <div class="music-toggle" id="music-toggle">
+            <i class="fas fa-music"></i>
+        </div>
+        
+        <div class="music-player">
+            <div class="music-header">
+                <div class="music-title">音乐播放器</div>
+                <div class="music-controls">
+                    <button class="control-btn" id="open-folder">
+                        <i class="fas fa-folder-open"></i> 目录
+                    </button>
+                </div>
+            </div>
+            
+            <div class="music-container" id="music-container">
+                <div class="img-container">
+                    <img src="img/打上花火.jpg" alt="music-cover" id="music-cover">
+                </div>
+                
+                <div class="music-info">
+                    <h4 id="title">打上花火</h4>
+                    <p id="artist">DAOKO × 米津玄師</p>
+                </div>
+                
+                <div class="progress-container" id="progress-container">
+                    <div class="progress" id="progress"></div>
+                </div>
+                
+                <div class="time-display">
+                    <span id="current-time">0:00</span>
+                    <span id="duration">0:00</span>
+                </div>
+                
+                <div class="navigation">
+                    <button id="prev" class="action-btn">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button id="play" class="action-btn action-btn-big">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button id="next" class="action-btn">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                </div>
+                
+                <div class="playlist" id="playlist">
+                    <!-- 播放列表将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 页面加载完成后隐藏加载动画
+        window.onload = function() {
+            document.getElementById("yingcang").style.display = "none";
+            
+            // 初始化音乐播放器
+            loadSong(songs[songIndex]);
+            updatePlaylist();
+        };
+
+        // 动态银河背景
+        const canvas = document.getElementById('galaxy-bg');
+        const ctx = canvas.getContext('2d');
+        
+        // 设置canvas尺寸
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // 星星类
+        class Star {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speed = Math.random() * 0.5 + 0.1;
+                this.brightness = Math.random() * 0.5 + 0.5;
+                this.color = `rgba(255, 255, 255, ${this.brightness})`;
+            }
+            
+            update(mouseX, mouseY) {
+                // 星星跟随鼠标移动产生视差效果
+                const dx = mouseX - canvas.width / 2;
+                const dy = mouseY - canvas.height / 2;
+                
+                this.x -= dx * this.speed * 0.01;
+                this.y -= dy * this.speed * 0.01;
+                
+                // 如果星星移出画布，重新放置到另一侧
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+                
+                // 星星闪烁效果
+                this.brightness += (Math.random() - 0.5) * 0.05;
+                this.brightness = Math.max(0.3, Math.min(1, this.brightness));
+                this.color = `rgba(255, 255, 255, ${this.brightness})`;
+            }
+            
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        // 创建星星
+        const stars = [];
+        for (let i = 0; i < 300; i++) {
+            stars.push(new Star());
+        }
+        
+        // 鼠标位置
+        let mouseX = canvas.width / 2;
+        let mouseY = canvas.height / 2;
+        
+        canvas.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        // 动画循环
+        function animate() {
+            ctx.fillStyle = 'rgba(10, 10, 26, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 绘制星星
+            stars.forEach(star => {
+                star.update(mouseX, mouseY);
+                star.draw();
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+        
+        // 音乐播放器功能
+        const musicContainer = document.getElementById("music-container");
+        const playBtn = document.getElementById("play");
+        const prevBtn = document.getElementById("prev");
+        const nextBtn = document.getElementById("next");
+        const progress = document.getElementById("progress");
+        const progressContainer = document.getElementById("progress-container");
+        const title = document.getElementById("title");
+        const artist = document.getElementById("artist");
+        const musicCover = document.getElementById("music-cover");
+        const currentTimeEl = document.getElementById("current-time");
+        const durationEl = document.getElementById("duration");
+        const playlistEl = document.getElementById("playlist");
+        const musicToggle = document.getElementById("music-toggle");
+        const musicPlayerContainer = document.getElementById("music-player-container");
+        const openFolderBtn = document.getElementById("open-folder");
+
+        // 还原原始歌曲列表
+        const songs = [
+            { 
+                id: 1, 
+                title: "打上花火", 
+                artist: "DAOKO × 米津玄師", 
+                cover: "img/打上花火.jpg",
+                url: "music/打上花火.mp3"
+            },
+            { 
+                id: 2, 
+                title: "让风告诉你", 
+                artist: "花玲&喵☆酱&宴宁&kinsen", 
+                cover: "img/让风告诉你 - 花玲&喵☆酱&宴宁&kinsen.jpg",
+                url: "music/让风告诉你 - 花玲&喵☆酱&宴宁&kinsen.mp3"
+            },
+            { 
+                id: 3, 
+                title: "グランドエスケープ", 
+                artist: "三浦透子", 
+                cover: "img/三浦透子 - グランドエスケープ (Movie edit).jpg",
+                url: "music/三浦透子 - グランドエスケープ (Movie edit).mp3"
+            },
+            { 
+                id: 4, 
+                title: "River Flows In You", 
+                artist: "Martin Ermen", 
+                cover: "img/Martin Ermen - River Flows In You.jpg",
+                url: "music/Martin Ermen - River Flows In You.mp3"
+            }
+        ];
+        
+        // 默认从第一首开始
+        let songIndex = 0;
+        let isPlaying = false;
+        
+        // 创建音频元素
+        const audioElement = new Audio();
+        
+        // 将歌曲细节加载到DOM
+        function loadSong(song) {
+            title.textContent = song.title;
+            artist.textContent = song.artist;
+            musicCover.src = song.cover;
+            audioElement.src = song.url;
+            
+            // 更新播放列表高亮
+            updatePlaylist();
+        }
+
+        // 播放歌曲
+        function playSong() {
+            isPlaying = true;
+            musicContainer.classList.add("play");
+            playBtn.querySelector('i.fas').classList.remove('fa-play');
+            playBtn.querySelector('i.fas').classList.add('fa-pause');
+            audioElement.play();
+        }
+
+        // 停止播放
+        function pauseSong() {
+            isPlaying = false;
+            musicContainer.classList.remove('play');
+            playBtn.querySelector('i.fas').classList.add('fa-play');
+            playBtn.querySelector('i.fas').classList.remove('fa-pause');
+            audioElement.pause();
+        }
+
+        // 上一首
+        function prevSong() {
+            songIndex--;
+            if (songIndex < 0) {
+                songIndex = songs.length - 1;
+            }
+            loadSong(songs[songIndex]);
+            if (isPlaying) {
+                playSong();
+            }
+        }
+        
+        // 下一首
+        function nextSong() {
+            songIndex++;
+            if (songIndex > songs.length - 1) {
+                songIndex = 0;
+            }
+            loadSong(songs[songIndex]);
+            if (isPlaying) {
+                playSong();
+            }
+        }
+
+        // 进度条更新
+        function updateProgress(e) {
+            const { duration, currentTime } = e.srcElement;
+            const progressPercent = (currentTime / duration) * 100;
+            progress.style.width = `${progressPercent}%`;
+            
+            // 更新时间显示
+            const formatTime = (time) => {
+                const minutes = Math.floor(time / 60);
+                const seconds = Math.floor(time % 60);
+                return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            };
+            
+            currentTimeEl.textContent = formatTime(currentTime);
+            if (duration) {
+                durationEl.textContent = formatTime(duration);
+            }
+        }
+        
+        // 设置进度条
+        function setProgress(e) {
+            const width = this.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audioElement.duration;
+            audioElement.currentTime = (clickX / width) * duration;
+        }
+        
+        // 更新播放列表
+        function updatePlaylist() {
+            playlistEl.innerHTML = '';
+            songs.forEach((song, index) => {
+                const item = document.createElement('div');
+                item.className = `playlist-item ${index === songIndex ? 'active' : ''}`;
+                item.innerHTML = `
+                    <i class="fas fa-music"></i>
+                    ${song.title} - ${song.artist}
+                `;
+                item.addEventListener('click', () => {
+                    songIndex = index;
+                    loadSong(songs[songIndex]);
+                    if (isPlaying) {
+                        playSong();
+                    }
+                });
+                playlistEl.appendChild(item);
+            });
+        }
+        
+        // 打开目录
+        function openFolder() {
+            // 在实际应用中，这里应该打开文件选择对话框
+            alert("打开目录功能 - 在实际应用中，这里会打开文件选择对话框");
+        }
+        
+        // 事件监听
+        // 1.播放歌曲
+        playBtn.onclick = function () {
+            musicContainer.classList.contains('play') ? pauseSong() : playSong();
+        };
+        
+        // 2.切换歌曲
+        prevBtn.onclick = prevSong;
+        nextBtn.onclick = nextSong;
+
+        // 3.播放器进度条相关
+        progressContainer.onclick = setProgress;
+        audioElement.ontimeupdate = updateProgress;
+        audioElement.onended = nextSong;
+        
+        // 4.音乐播放器显示/隐藏
+        musicToggle.onclick = function() {
+            musicPlayerContainer.classList.toggle('open');
+        };
+        
+        // 5.打开目录
+        openFolderBtn.onclick = openFolder;
+        
+        // 导航菜单点击效果
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.menu-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
